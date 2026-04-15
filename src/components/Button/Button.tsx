@@ -3,13 +3,13 @@ import { Icon } from "@iconify/react";
 
 import type { ButtonProps } from "./Button.types";
 
-export function Button({
+export const Button = ({
   variant = "default",
   disabled,
   className,
   icon,
   children,
-}: ButtonProps) {
+}: ButtonProps) => {
   return (
     <button
       className={clsx(
@@ -36,4 +36,4 @@ export function Button({
       {children && <span>{children}</span>}
     </button>
   );
-}
+};

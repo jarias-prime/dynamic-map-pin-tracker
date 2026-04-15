@@ -1,9 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wdth,wght@0,75..100,100..900;1,75..100,100..900&display=swap");
 
+@import url("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css");
+
 @import "tailwindcss";
 
 @theme {
-  /* Neutral */
   --color-neutral-050: #f8f9fb;
   --color-neutral-100: #e9e9eb;
   --color-neutral-200: #d8d8da;
@@ -193,6 +194,7 @@
 
     /* Icon Colors */
     --color-icon-default: var(--color-white);
+    /* Neutral */
     --color-icon-secondary: var(--color-neutral-400);
     --color-icon-tertiary: color-mix(
       in srgb,
@@ -209,4 +211,8 @@
 
 * {
   font-family: "Roboto", sans-serif;
+}
+
+body {
+  overflow: hidden;
 }

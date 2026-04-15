@@ -5,12 +5,12 @@ import { Icon } from "@iconify/react";
 
 import type { BannerProps } from "./Banner.types";
 
-export function Banner({
+export const Banner = ({
   variant = "info",
   className,
   title,
   description,
-}: BannerProps) {
+}: BannerProps) => {
   const [closing, setClosing] = useState(false);
   const [visible, setVisible] = useState(true);
 
@@ -109,4 +109,4 @@ export function Banner({
       </div>
     </div>
   );
-}
+};
