@@ -24,7 +24,8 @@ export const Button = ({
         size === "lg" && "px-4 py-3 text-lg",
         variant === "default" && "bg-background-default text-white",
         variant === "secondary" && "bg-background-secondary text-white",
-        variant === "tertiary" && "bg-background-tertiary text-txt-primary",
+        variant === "tertiary" &&
+          "bg-background-tertiary text-txt-primary hover:bg-background-primary-hover hover:text-white",
         variant === "primary" &&
           "bg-background-primary text-white hover:bg-background-primary-hover",
         variant === "success" &&

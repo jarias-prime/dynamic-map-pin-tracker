@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 import { useMapStore } from "./store/MapStore";
 
+import * as L from "leaflet";
 import type { LatLngTuple } from "leaflet";
 import { useMap, useMapEvents } from "react-leaflet";
 import {
@@ -38,6 +39,85 @@ const App = () => {
       },
     );
   }, [setCenterPosition]);
+
+  const redIcon = new L.Icon({
+    iconUrl:
+      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+    shadowUrl:
+      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+  });
+
+  const blueIcon = new L.Icon({
+    iconUrl:
+      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
+    shadowUrl:
+      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+  });
+
+  const MapClickHandler = ({
+    onAddMarker,
+  }: {
+    onAddMarker: (lat: number, lng: number, address: string) => void;
+  }) => {
+    const { setLoading } = useMapStore();
+
+    useMapEvents({
+      async click(e) {
+        const { lat, lng } = e.latlng;
+
+        const address = await getAddress(lat, lng, setLoading);
+
+        onAddMarker(lat, lng, address);
+      },
+    });
+
+    return null;
+  };
+
+  const getAddress = async (
+    lat: number,
+    lng: number,
+    setLoading: (loading: boolean) => void,
+  ) => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+      );
+
+      const data = await res.json();
+
+      setLoading(false);
+      return data.display_name;
+    } catch (error) {
+      setLoading(false);
+
+      console.error("Error fetching address:", error);
+
+      return "Error fetching address";
+    }
+  };
+
+  const ChangeMapView = ({ center }: { center: LatLngTuple }) => {
+    const map = useMap();
+    const mapRef = useRef(map);
+
+    useEffect(() => {
+      mapRef.current?.flyTo(center, 13);
+    }, [center]);
+
+    return null;
+  };
 
   return (
     <>
@@ -78,6 +158,11 @@ const App = () => {
           <Marker
             key={index}
             position={[pos.lat, pos.long]}
+            icon={
+              pos.lat === centerPosition[0] && pos.long === centerPosition[1]
+                ? redIcon
+                : blueIcon
+            }
             draggable={true}
             eventHandlers={{
               dragend: async (e) => {
@@ -107,62 +192,6 @@ const App = () => {
       </MapContainer>
     </>
   );
-};
-
-// Helper Functions
-const MapClickHandler = ({
-  onAddMarker,
-}: {
-  onAddMarker: (lat: number, lng: number, address: string) => void;
-}) => {
-  const { setLoading } = useMapStore();
-
-  useMapEvents({
-    async click(e) {
-      const { lat, lng } = e.latlng;
-
-      const address = await getAddress(lat, lng, setLoading);
-
-      onAddMarker(lat, lng, address);
-    },
-  });
-
-  return null;
-};
-
-const getAddress = async (
-  lat: number,
-  lng: number,
-  setLoading: (loading: boolean) => void,
-) => {
-  setLoading(true);
-  try {
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
-    );
-
-    const data = await res.json();
-
-    setLoading(false);
-    return data.display_name;
-  } catch (error) {
-    setLoading(false);
-
-    console.error("Error fetching address:", error);
-
-    return "Error fetching address";
-  }
-};
-
-const ChangeMapView = ({ center }: { center: LatLngTuple }) => {
-  const map = useMap();
-  const mapRef = useRef(map);
-
-  useEffect(() => {
-    mapRef.current?.flyTo(center, 13);
-  }, [center]);
-
-  return null;
 };
 
 export default App;
