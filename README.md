@@ -53,3 +53,5 @@ npm run preview
 - Leaflet / React Leaflet
 - Tailwind CSS
 - Zustand
+
+Preview Project: [Dynamic Map Pin Tracker](https://dynamic-map-pin-tracker.web.app/)
