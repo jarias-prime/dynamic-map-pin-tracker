@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { useMapStore } from "../../store/MapStore";
 
 export const SearchAddress = () => {
-  const { positionsList, setPositionsList } = useMapStore();
+  const { positionsList, setPositionsList, setCenterPosition } = useMapStore();
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [query, setQuery] = useState("");
@@ -84,6 +84,7 @@ export const SearchAddress = () => {
       },
     ]);
 
+    setCenterPosition([lat, long]);
     setQuery(place.display_name);
     setIsOpen(false);
   };

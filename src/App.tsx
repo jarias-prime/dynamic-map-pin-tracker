@@ -29,17 +29,6 @@ const App = () => {
 
   const [mapType, setMapType] = useState("osm");
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setCenterPosition([pos.coords.latitude, pos.coords.longitude]);
-      },
-      (err) => {
-        console.error(err);
-      },
-    );
-  }, [setCenterPosition]);
-
   const redIcon = new L.Icon({
     iconUrl:
       "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
@@ -91,6 +80,8 @@ const App = () => {
   ) => {
     setLoading(true);
     try {
+      setCenterPosition([lat, lng]);
+
       const res = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
       );
@@ -98,6 +89,7 @@ const App = () => {
       const data = await res.json();
 
       setLoading(false);
+
       return data.display_name;
     } catch (error) {
       setLoading(false);
@@ -149,9 +141,9 @@ const App = () => {
         />
 
         <MapClickHandler
-          onAddMarker={(lat, lng, address) =>
-            setPositionsList([...positionsList, { lat, long: lng, address }])
-          }
+          onAddMarker={(lat, lng, address) => {
+            setPositionsList([...positionsList, { lat, long: lng, address }]);
+          }}
         />
 
         {positionsList.map((pos, index) => (
