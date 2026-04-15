@@ -75,7 +75,32 @@ const App = () => {
         />
 
         {positionsList.map((pos, index) => (
-          <Marker key={index} position={[pos.lat, pos.long]}>
+          <Marker
+            key={index}
+            position={[pos.lat, pos.long]}
+            draggable={true}
+            eventHandlers={{
+              dragend: async (e) => {
+                const marker = e.target;
+                const { lat, lng } = marker.getLatLng();
+
+                const address = await getAddress(lat, lng, setLoading);
+
+                const updatedList = positionsList.map((item, i) =>
+                  i === index
+                    ? {
+                        ...item,
+                        lat,
+                        long: lng,
+                        address,
+                      }
+                    : item,
+                );
+
+                setPositionsList(updatedList);
+              },
+            }}
+          >
             <Popup>{pos.address}</Popup>
           </Marker>
         ))}
