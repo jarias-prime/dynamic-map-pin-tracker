@@ -14,11 +14,13 @@ export const PinLists = () => {
   return (
     <div
       className={clsx(
-        "absolute z-30 top-20 left-10",
+        "absolute z-30 top-20 left-0 mx-2",
         "rounded-lg shadow-md overflow-hidden",
         "bg-white/80 backdrop-blur-2xl backdrop-saturate-150",
         "transition-all duration-300",
-        collapsed ? "w-35 h-11" : "w-[25em] h-[calc(100vh-100px)]",
+        collapsed
+          ? "w-35 h-11"
+          : "h-[calc(100vh-100px)] w-[calc(100%-1rem)] sm:w-[25em] sm:h-[calc(100vh-100px)]",
       )}
     >
       <div
@@ -55,7 +57,7 @@ export const PinLists = () => {
               </div>
             </div>
           ) : (
-            <div className="h-[calc(calc(100% - 42px))] overflow-y-auto">
+            <div className="h-[calc(calc(100%-42px))] overflow-y-auto">
               {positionsList.map((pos, index) => (
                 <div
                   key={index}
