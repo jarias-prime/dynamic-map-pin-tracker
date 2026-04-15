@@ -5,17 +5,23 @@ import type { ButtonProps } from "./Button.types";
 
 export const Button = ({
   variant = "default",
+  size = "md",
   disabled,
   className,
   icon,
+  onClick,
   children,
 }: ButtonProps) => {
   return (
     <button
+      onClick={onClick}
       className={clsx(
-        "max-h-8 flex gap-3 items-center px-3.5 py-6 font-semibold rounded-md cursor-pointer",
+        "flex gap-3 items-center font-semibold rounded-md cursor-pointer",
         "duration-150 ease-in-out",
         "active:scale-95",
+        size === "sm" && "px-1 py-1 text-sm",
+        size === "md" && "px-3.5 py-2 text-base",
+        size === "lg" && "px-4 py-3 text-lg",
         variant === "default" && "bg-background-default text-white",
         variant === "secondary" && "bg-background-secondary text-white",
         variant === "tertiary" && "bg-background-tertiary text-txt-primary",

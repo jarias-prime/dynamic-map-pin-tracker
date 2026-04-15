@@ -39,7 +39,6 @@ const App = () => {
     );
   }, [setCenterPosition]);
 
-  console.log(positionsList);
   return (
     <>
       <Navigation />
