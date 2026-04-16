@@ -4,12 +4,18 @@ import clsx from "clsx";
 
 import { useMapStore } from "../../store/MapStore";
 
+type SearchPlace = {
+  lat: string;
+  lon: string;
+  display_name: string;
+};
+
 export const SearchAddress = () => {
   const { positionsList, setPositionsList, setCenterPosition } = useMapStore();
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<SearchPlace[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
   const effectiveResults = useMemo(
@@ -26,7 +32,7 @@ export const SearchAddress = () => {
         `https://nominatim.openstreetmap.org/search?format=json&q=${value}`,
       );
 
-      const data = await res.json();
+      const data: SearchPlace[] = await res.json();
 
       setResults(data);
       if (data.length > 0) {
@@ -67,11 +73,7 @@ export const SearchAddress = () => {
     }
   }, [isOpen]);
 
-  const handleSelect = (place: {
-    lat: string;
-    lon: string;
-    display_name: string;
-  }) => {
+  const handleSelect = (place: SearchPlace) => {
     const lat = parseFloat(place.lat);
     const long = parseFloat(place.lon);
 
@@ -80,7 +82,10 @@ export const SearchAddress = () => {
       {
         lat,
         long,
-        address: place.display_name,
+        address: {
+          name: place.display_name,
+          display_name: place.display_name,
+        },
       },
     ]);
 
@@ -111,23 +116,18 @@ export const SearchAddress = () => {
 
       {showResults && effectiveResults.length > 0 && (
         <div className="absolute z-30 w-[calc(100%-2rem)] mt-2 grid gap-1.5 bg-white border border-neutral-100 rounded-md shadow-md max-h-60 overflow-auto">
-          {effectiveResults.map(
-            (
-              place: { lat: string; lon: string; display_name: string },
-              idx: number,
-            ) => (
-              <div
-                key={idx}
-                onClick={() => handleSelect(place)}
-                className={clsx(
-                  "flex items-center p-2 text-sm cursor-pointer w-full",
-                  "hover:bg-neutral-100",
-                )}
-              >
-                {place.display_name}
-              </div>
-            ),
-          )}
+          {effectiveResults.map((place: SearchPlace, idx: number) => (
+            <div
+              key={idx}
+              onClick={() => handleSelect(place)}
+              className={clsx(
+                "flex items-center p-2 text-sm cursor-pointer w-full",
+                "hover:bg-neutral-100",
+              )}
+            >
+              {place.display_name}
+            </div>
+          ))}
         </div>
       )}
     </div>
