@@ -2,6 +2,8 @@
 
 An interactive map-based application that allows users to drop, view, and manage location pins in real time, displaying coordinates and reverse-geocoded addresses.
 
+<img width="800" height="413" alt="ezgif-6108abf0cc9ef8c5" src="https://github.com/user-attachments/assets/f87b0ec3-2976-4e85-b0b5-27e6be99db7b" />
+
 ## Features
 
 - Add pins by clicking on the map
