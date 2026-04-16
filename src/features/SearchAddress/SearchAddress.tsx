@@ -44,7 +44,7 @@ export const SearchAddress = () => {
 
     const timeout = setTimeout(() => {
       searchLocation(query);
-    }, 1000);
+    }, 500);
 
     return () => clearTimeout(timeout);
   }, [query]);
@@ -85,7 +85,7 @@ export const SearchAddress = () => {
     ]);
 
     setCenterPosition([lat, long]);
-    setQuery(place.display_name);
+    setQuery("");
     setIsOpen(false);
   };
 

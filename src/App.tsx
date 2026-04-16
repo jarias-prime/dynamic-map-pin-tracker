@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import { useMapStore } from "./store/MapStore";
 
@@ -20,14 +20,14 @@ import { PinLists } from "./features/PinLists/PinLists";
 const App = () => {
   const {
     loading,
+    mapType,
     positionsList,
     centerPosition,
     setLoading,
+    setMapType,
     setPositionsList,
     setCenterPosition,
   } = useMapStore();
-
-  const [mapType, setMapType] = useState("osm");
 
   const redIcon = new L.Icon({
     iconUrl:
@@ -56,7 +56,11 @@ const App = () => {
   const MapClickHandler = ({
     onAddMarker,
   }: {
-    onAddMarker: (lat: number, lng: number, address: string) => void;
+    onAddMarker: (
+      lat: number,
+      lng: number,
+      address: { name: string; display_name: string },
+    ) => void;
   }) => {
     const { setLoading } = useMapStore();
 
@@ -77,7 +81,7 @@ const App = () => {
     lat: number,
     lng: number,
     setLoading: (loading: boolean) => void,
-  ) => {
+  ): Promise<{ name: string; display_name: string }> => {
     setLoading(true);
     try {
       setCenterPosition([lat, lng]);
@@ -90,13 +94,19 @@ const App = () => {
 
       setLoading(false);
 
-      return data.display_name;
+      return {
+        name: data.name || "Unknown",
+        display_name: data.display_name || "Unknown location",
+      };
     } catch (error) {
       setLoading(false);
 
       console.error("Error fetching address:", error);
 
-      return "Error fetching address";
+      return {
+        name: "Error",
+        display_name: "Error fetching address",
+      };
     }
   };
 
@@ -141,7 +151,11 @@ const App = () => {
         />
 
         <MapClickHandler
-          onAddMarker={(lat, lng, address) => {
+          onAddMarker={(
+            lat,
+            lng,
+            address: { name: string; display_name: string },
+          ) => {
             setPositionsList([...positionsList, { lat, long: lng, address }]);
           }}
         />
@@ -178,7 +192,7 @@ const App = () => {
               },
             }}
           >
-            <Popup>{pos.address}</Popup>
+            <Popup>{pos.address.display_name}</Popup>
           </Marker>
         ))}
       </MapContainer>
