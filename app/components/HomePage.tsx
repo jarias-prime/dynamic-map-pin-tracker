@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
+
 import { useMapStore } from "@/app/store/MapStore";
+
 import * as L from "leaflet";
 import type { LatLngTuple } from "leaflet";
 import { useMap, useMapEvents } from "react-leaflet";
@@ -12,6 +15,7 @@ import {
   TileLayer,
   ZoomControl,
 } from "react-leaflet";
+import formatcoords from "formatcoords";
 
 import { Navigation } from "@/app/features/Navigation/Navigation";
 import { MapLayers, mapLayersData } from "@/app/features/MapLayers/index";
@@ -31,23 +35,11 @@ export default function HomePage() {
 
   const markerRefs = useRef<{ [key: number]: L.Marker }>({});
 
-  const redIcon = new L.Icon({
-    iconUrl:
-      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+  const markerIcon = new L.Icon({
+    iconUrl: "/images/map-pin-v2.svg",
     shadowUrl:
       "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-  });
-
-  const blueIcon = new L.Icon({
-    iconUrl:
-      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
-    shadowUrl:
-      "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-    iconSize: [25, 41],
+    iconSize: [24, 36],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     shadowSize: [41, 41],
@@ -168,11 +160,7 @@ export default function HomePage() {
           <Marker
             key={index}
             position={[pos.lat, pos.long]}
-            icon={
-              pos.lat === centerPosition[0] && pos.long === centerPosition[1]
-                ? redIcon
-                : blueIcon
-            }
+            icon={markerIcon}
             draggable={true}
             ref={(ref) => {
               if (ref) {
@@ -187,11 +175,33 @@ export default function HomePage() {
                 const updatedList = positionsList.map((item, i) =>
                   i === index ? { ...item, lat, long: lng, address } : item,
                 );
+
                 setPositionsList(updatedList);
               },
             }}
           >
-            <Popup>{pos.address.display_name}</Popup>
+            <Popup>
+              <div className="grid gap-2">
+                <h4 className="m-0 text-lg text-txt-default font-medium">
+                  Pin #{index + 1}
+                </h4>
+                <div className="flex items-center gap-1">
+                  <Image
+                    className="m-auto"
+                    src="/images/map-pin-v1.svg"
+                    alt="Map Pin Icon"
+                    height={12}
+                    width={12}
+                  />
+                  <p className="m-0! text-xs text-txt-secondary leading-[140%]">
+                    {formatcoords(pos.lat, pos.long).format("DD MM ss X", {
+                      latLonSeparator: " ",
+                      decimalPlaces: 1,
+                    })}
+                  </p>
+                </div>
+              </div>
+            </Popup>
           </Marker>
         ))}
       </MapContainer>

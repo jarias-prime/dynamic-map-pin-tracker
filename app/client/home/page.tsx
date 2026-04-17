@@ -1,7 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 
 import { useUserStore } from "@/app/store/UserStore";

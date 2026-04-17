@@ -157,6 +157,16 @@
   font-family: "Roboto", sans-serif;
 }
 
-/* body {
-  overflow: hidden;
-} */
+.leaflet-popup .leaflet-popup-content {
+  min-width: 186px !important;
+  margin: 0 !important;
+  padding: 8px 12px 12px 12px;
+}
+
+.leaflet-popup .leaflet-popup-close-button {
+  display: none !important;
+}
+
+.leaflet-popup .leaflet-popup-tip-container {
+  display: none;
+}

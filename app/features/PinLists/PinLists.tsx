@@ -1,7 +1,9 @@
-import { use, useState } from "react";
+"use client";
+
 import Image from "next/image";
 import clsx from "clsx";
 import formatcoords from "formatcoords";
+
 import { useMapStore } from "@/app/store/MapStore";
 
 type PinListsProps = {
