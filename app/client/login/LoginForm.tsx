@@ -77,7 +77,8 @@ export default function LoginForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
                 className={clsx(
-                  "w-full p-3 border rounded-md transition duration-150 ease-in-out",
+                  "w-full p-3 border rounded-md",
+                  "transition duration-150 ease-in-out",
                   "placeholder:text-[14px] placeholder:leading-[140%] placeholder:text-txt-secondary",
                   "focus:outline-none focus:ring-2 disabled:opacity-50",
                   errorEmail
@@ -110,7 +111,8 @@ export default function LoginForm() {
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoading}
                 className={clsx(
-                  "w-full p-3 border rounded-md transition duration-150 ease-in-out",
+                  "w-full p-3 border rounded-md",
+                  "transition duration-150 ease-in-out",
                   "placeholder:text-[14px] placeholder:leading-[140%] placeholder:text-txt-secondary",
                   "focus:outline-none focus:ring-2 disabled:opacity-50",
                   errorPassword

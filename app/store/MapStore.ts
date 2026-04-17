@@ -29,7 +29,7 @@ export const useMapStore = create<MapState>()(
       loading: true,
       mapType: "osm",
       positionsList: [],
-      centerPosition: [14.5995, 120.9842],
+      centerPosition: [-37.8394, 144.942],
 
       setLoading: (loading) => set({ loading }),
       setMapType: (mapType) => set({ mapType }),

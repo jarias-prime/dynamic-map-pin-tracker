@@ -137,7 +137,7 @@ export default function HomePage() {
         </div>
       )}
       <MapContainer
-        className="relative z-10 h-[calc(100vh-56px)] w-full"
+        className="relative z-10 h-[calc(100vh-52px)] w-full"
         center={centerPosition}
         zoom={13}
         zoomControl={false}

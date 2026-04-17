@@ -1,16 +1,13 @@
-import { useState } from "react";
-
-import { Icon } from "@iconify/react";
+import Image from "next/image";
 import clsx from "clsx";
 
+import formatcoords from "formatcoords";
+
 import { useMapStore } from "@/app/store/MapStore";
-import { SearchAddress } from "@/app/features/SearchAddress/SearchAddress";
-import { Button } from "@/app/components/ui/Button/Button";
+// import { SearchAddress } from "@/app/features/SearchAddress/SearchAddress";
 
 export const PinLists = () => {
   const { positionsList, centerPosition, setCenterPosition } = useMapStore();
-
-  const [collapsed, setCollapsed] = useState(false);
 
   const removePin = (index: number) => {
     const removed = positionsList[index];
@@ -35,106 +32,109 @@ export const PinLists = () => {
   return (
     <div
       className={clsx(
-        "absolute z-30 top-20 left-0 mx-2",
+        "absolute z-30 top-19 left-6 h-[calc(100vh-100px)] w-[calc(100%-1rem)] sm:w-[25em] flex flex-col mx-2 bg-background-default",
         "rounded-lg shadow-md overflow-hidden",
-        "bg-white/70 backdrop-blur backdrop-saturate-150",
         "transition-all duration-300",
-        collapsed
-          ? "w-35 h-11"
-          : "h-[calc(100vh-100px)] w-[calc(100%-1rem)] sm:w-[25em] flex flex-col",
       )}
     >
       <div
         className={clsx(
-          "flex gap-2 justify-between items-center px-4 py-2",
+          "flex gap-2 justify-between items-center px-5 pt-5 pb-3",
           "border-b border-gray-200",
         )}
       >
-        <h5>Pin List</h5>
-
-        <Button
-          variant="tertiary"
-          size="sm"
-          onClick={() => setCollapsed((p) => !p)}
-        >
-          <Icon
-            className={clsx(
-              "text-xl transition-transform duration-200",
-              collapsed && "rotate-180",
-            )}
-            icon="ph:caret-left-bold"
-          />
-        </Button>
+        <h3 className="text-xl font-medium text-txt-default leading-[140%]">
+          Pin Lists
+        </h3>
       </div>
 
-      {!collapsed && (
-        <>
-          <SearchAddress />
-          <div className="flex-1 grid place-items-center py-6 overflow-y-auto">
-            {positionsList.length === 0 ? (
-              <div className="grid gap-4 text-center text-gray-500 w-full">
-                <Icon
-                  className="m-auto text-[60px]"
-                  icon="ph:map-trifold-fill"
-                />
-                <div className="grid gap-2">
-                  <p className="text-2xl">No pins added yet.</p>
-                  <p>Click on the map to add a pin or search location.</p>
-                </div>
-              </div>
-            ) : (
-              <div className="h-full w-full overflow-y-auto">
-                {positionsList.map((pos, index) => {
-                  const isActive =
-                    pos.lat === centerPosition[0] &&
-                    pos.long === centerPosition[1];
+      {/* <SearchAddress /> */}
 
-                  return (
-                    <div
-                      key={`${pos.lat}-${pos.long}-${index}`}
-                      className={clsx(
-                        "flex gap-4 items-start justify-between px-4 py-2",
-                        "border-b border-gray-200",
-                        "transition duration-150 ease-in-out",
-                        "hover:bg-background-primary-subdued",
-                        isActive && "bg-background-primary-subdued",
-                      )}
-                      onMouseEnter={() =>
-                        setCenterPosition([pos.lat, pos.long])
-                      }
-                    >
-                      <div>
-                        <h5 className="text-lg text-txt-primary m-0">
-                          {pos.address.name}
-                        </h5>
-                        <p className="text-sm text-neutral-500 font-semibold">
-                          {pos.lat.toFixed(4)}, {pos.long.toFixed(4)}
-                        </p>
-                        <p className="text-sm text-gray-500 line-clamp-2">
-                          {pos.address.display_name}
-                        </p>
-                      </div>
+      <div className="grid overflow-y-auto">
+        {positionsList.length === 0 ? (
+          <div className="grid gap-4 text-center text-gray-500 w-full pt-16">
+            <Image
+              className="m-auto"
+              src="/images/magnifying-glass.svg"
+              alt="Magnifying Glass Icon"
+              height={24}
+              width={24}
+            />
 
-                      <div className="mt-0.5">
-                        <Icon
-                          className={clsx(
-                            "text-xl text-txt-error cursor-pointer",
-                            "transition duration-150 ease-in-out",
-                            "hover:text-txt-error-hover",
-                            "active:scale-90",
-                          )}
-                          icon="ph:trash-fill"
-                          onClick={() => removePin(index)}
+            <div className="grid gap-1">
+              <h5 className="font-semibold leading-[140%] text-txt-secondary">
+                No Result Found
+              </h5>
+              <p className="text-[12px] leading-[140%] text-txt-secondary">
+                Your map pin list will show in here.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="h-full w-full overflow-y-auto">
+            {positionsList.map((pos, index) => {
+              const isActive =
+                pos.lat === centerPosition[0] && pos.long === centerPosition[1];
+
+              return (
+                <div
+                  className={clsx(
+                    "flex gap-5 items-center justify-between p-5",
+                    "border-b border-gray-200",
+                    "transition duration-150 ease-in-out",
+                    "hover:bg-background-secondary",
+                    isActive && "bg-background-primary-subdued",
+                  )}
+                  key={`${pos.lat}-${pos.long}-${index}`}
+                  onMouseEnter={() => setCenterPosition([pos.lat, pos.long])}
+                >
+                  <div className="flex items-center gap-5">
+                    <div className="w-9.5 h-9.5 flex items-center justify-center bg-background-primary-subdued border border-border-default rounded-full">
+                      <span className="text-txt-primary leading-[140%]">
+                        #1
+                      </span>
+                    </div>
+                    <div className="grid gap-1">
+                      <h4 className="text-lg font-medium text-txt-default leading-[140%]">
+                        Pin #{index + 1}
+                      </h4>
+                      <div className="flex items-center gap-1">
+                        <Image
+                          className="m-auto"
+                          src="/images/map-pin-v1.svg"
+                          alt="Map Pin Icon"
+                          height={12}
+                          width={12}
                         />
+                        <p className="text-xs text-txt-secondary leading-[140%]">
+                          {formatcoords(pos.lat, pos.long).format(
+                            "DD MM ss X",
+                            {
+                              latLonSeparator: " ",
+                              decimalPlaces: 1,
+                            },
+                          )}
+                        </p>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                  </div>
+
+                  <div className="mt-0.5">
+                    <Image
+                      className="p-2 min-h-10 min-w-10 rounded-full border border-border-secondary cursor-pointer"
+                      src="/images/trash.svg"
+                      alt="Trash Icon"
+                      height={24}
+                      width={24}
+                      onClick={() => removePin(index)}
+                    />
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 };
