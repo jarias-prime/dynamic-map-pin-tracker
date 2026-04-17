@@ -3,9 +3,9 @@ import { useState } from "react";
 import { Icon } from "@iconify/react";
 import clsx from "clsx";
 
-import { useMapStore } from "../../store/MapStore";
-import { SearchAddress } from "../../features/SearchAddress/SearchAddress";
-import { Button } from "../../components/Button/Button";
+import { useMapStore } from "@/app/store/MapStore";
+import { SearchAddress } from "@/app/features/SearchAddress/SearchAddress";
+import { Button } from "@/app/components/ui/Button/Button";
 
 export const PinLists = () => {
   const { positionsList, centerPosition, setCenterPosition } = useMapStore();
@@ -83,7 +83,7 @@ export const PinLists = () => {
                 </div>
               </div>
             ) : (
-              <div className="h-full overflow-y-auto">
+              <div className="h-full w-full overflow-y-auto">
                 {positionsList.map((pos, index) => {
                   const isActive =
                     pos.lat === centerPosition[0] &&

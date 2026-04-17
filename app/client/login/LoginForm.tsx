@@ -1,14 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import clsx from "clsx";
 
-import { useAuth } from "../../contexts/AuthContext";
-import { Button } from "../../components/Button/Button";
+import { useUserStore } from "@/app/store/UserStore";
+
+import { Button } from "@/app/components/ui/Button/Button";
 
 export default function LoginForm() {
-  const { login } = useAuth();
+  const { login } = useUserStore();
+
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
@@ -29,6 +34,8 @@ export default function LoginForm() {
     } else {
       setEmail("");
       setPassword("");
+
+      router.push("/client/home");
     }
 
     setIsLoading(false);
@@ -36,7 +43,7 @@ export default function LoginForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-[url(/images/bg-login.jpg)]">
-      <div className="grid gap-12 min-h-[494px] min-w-[400px] max-w-[400px] bg-background-default rounded-2xl shadow-lg px-10 py-12">
+      <div className="grid gap-12 min-h-123.5 min-w-100 bg-background-default rounded-2xl shadow-lg px-10 py-12">
         <Image
           className="m-auto"
           src="/images/map-pinboard-logo.svg"

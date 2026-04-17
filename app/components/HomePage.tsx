@@ -2,8 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-import { useAuth } from "@/app/contexts/AuthContext";
-
 import { useMapStore } from "@/app/store/MapStore";
 
 import * as L from "leaflet";
@@ -22,8 +20,6 @@ import { MapLayers, mapLayersData } from "@/app/features/MapLayers/index";
 import { PinLists } from "@/app/features/PinLists/PinLists";
 
 export default function HomePage() {
-  const { user, logout } = useAuth();
-
   const {
     loading,
     mapType,
@@ -141,7 +137,7 @@ export default function HomePage() {
         </div>
       )}
       <MapContainer
-        className="w-full h-[calc(100vh-56px)] mt-14 absolute z-10"
+        className="relative z-10 h-[calc(100vh-56px)] w-full"
         center={centerPosition}
         zoom={13}
         zoomControl={false}

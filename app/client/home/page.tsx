@@ -3,21 +3,28 @@
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/app/contexts/AuthContext";
 
-const HomePage = dynamic(() => import("./HomePage"), { ssr: false });
+import { useUserStore } from "@/app/store/UserStore";
+
+const HomePage = dynamic(() => import("@/app/components/HomePage"), {
+  ssr: false,
+});
 
 export default function Home() {
-  const { isLoggedIn } = useAuth();
+  const { isAuthenticated, hydrated } = useUserStore();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (hydrated && !isAuthenticated) {
       router.push("/");
     }
-  }, [isLoggedIn, router]);
+  }, [hydrated, isAuthenticated, router]);
 
-  if (!isLoggedIn) {
+  if (!hydrated) {
+    return null;
+  }
+
+  if (!isAuthenticated) {
     return null;
   }
 

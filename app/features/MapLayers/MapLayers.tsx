@@ -1,4 +1,4 @@
-import { Dropdown } from "../../components/Dropdown/Dropdown";
+import { Dropdown } from "@/app/components/ui/Dropdown/Dropdown";
 import { mapLayersData } from "./MapLayers.Data";
 
 interface MapLayersProps {

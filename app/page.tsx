@@ -2,20 +2,21 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "./contexts/AuthContext";
+
+import { useUserStore } from "@/app/store/UserStore";
 
 import LoginForm from "./client/login/LoginForm";
 
 export default function Page() {
-  const { isLoggedIn } = useAuth();
+  const { isAuthenticated } = useUserStore();
 
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isAuthenticated) {
       router.push("/client/home");
     }
-  }, [isLoggedIn, router]);
+  }, [isAuthenticated, router]);
 
   return <LoginForm />;
 }

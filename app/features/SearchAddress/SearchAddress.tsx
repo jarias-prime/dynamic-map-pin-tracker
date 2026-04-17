@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import clsx from "clsx";
 
-import { useMapStore } from "../../store/MapStore";
+import { useMapStore } from "@/app/store/MapStore";
 
 type SearchPlace = {
   lat: string;
