@@ -1,3 +1,9 @@
+
+
+https://github.com/user-attachments/assets/d95be05f-b9eb-4e0d-808a-713e0cba3d34
+
+
+
 # Dynamic Map Pin Tracker
 
 An interactive map-based application that allows users to drop, view, and manage location pins in real time, displaying coordinates and reverse-geocoded addresses.
