@@ -1,19 +1,28 @@
 import Image from "next/image";
 import clsx from "clsx";
-
 import formatcoords from "formatcoords";
-
 import { useMapStore } from "@/app/store/MapStore";
-// import { SearchAddress } from "@/app/features/SearchAddress/SearchAddress";
 
-export const PinLists = () => {
-  const { positionsList, centerPosition, setCenterPosition } = useMapStore();
+type PinListsProps = {
+  positions: {
+    long: number;
+    lat: number;
+    address: { name: string; display_name: string };
+  }[];
+  onHoverItem: (index: number) => void;
+  onLeaveList: () => void;
+};
+
+export const PinLists = ({
+  positions,
+  onHoverItem,
+  onLeaveList,
+}: PinListsProps) => {
+  const { centerPosition, setCenterPosition } = useMapStore();
 
   const removePin = (index: number) => {
-    const removed = positionsList[index];
-
-    const newList = positionsList.filter((_, i) => i !== index);
-
+    const removed = positions[index];
+    const newList = positions.filter((_, i) => i !== index);
     useMapStore.setState({ positionsList: newList });
 
     if (
@@ -36,6 +45,7 @@ export const PinLists = () => {
         "rounded-lg shadow-md overflow-hidden",
         "transition-all duration-300",
       )}
+      onMouseLeave={onLeaveList}
     >
       <div
         className={clsx(
@@ -48,10 +58,8 @@ export const PinLists = () => {
         </h3>
       </div>
 
-      {/* <SearchAddress /> */}
-
       <div className="grid overflow-y-auto">
-        {positionsList.length === 0 ? (
+        {positions.length === 0 ? (
           <div className="grid gap-4 text-center text-gray-500 w-full pt-16">
             <Image
               className="m-auto"
@@ -60,7 +68,6 @@ export const PinLists = () => {
               height={24}
               width={24}
             />
-
             <div className="grid gap-1">
               <h5 className="font-semibold leading-[140%] text-txt-secondary">
                 No Result Found
@@ -72,7 +79,7 @@ export const PinLists = () => {
           </div>
         ) : (
           <div className="h-full w-full overflow-y-auto">
-            {positionsList.map((pos, index) => {
+            {positions.map((pos, index) => {
               const isActive =
                 pos.lat === centerPosition[0] && pos.long === centerPosition[1];
 
@@ -86,12 +93,15 @@ export const PinLists = () => {
                     isActive && "bg-background-primary-subdued",
                   )}
                   key={`${pos.lat}-${pos.long}-${index}`}
-                  onMouseEnter={() => setCenterPosition([pos.lat, pos.long])}
+                  onMouseEnter={() => {
+                    setCenterPosition([pos.lat, pos.long]);
+                    onHoverItem(index);
+                  }}
                 >
                   <div className="flex items-center gap-5">
                     <div className="w-9.5 h-9.5 flex items-center justify-center bg-background-primary-subdued border border-border-default rounded-full">
                       <span className="text-txt-primary leading-[140%]">
-                        #1
+                        #{index + 1}
                       </span>
                     </div>
                     <div className="grid gap-1">

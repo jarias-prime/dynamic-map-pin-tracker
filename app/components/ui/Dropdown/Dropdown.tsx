@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import { Icon } from "@iconify/react";

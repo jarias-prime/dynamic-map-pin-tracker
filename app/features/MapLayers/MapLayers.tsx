@@ -1,3 +1,5 @@
+"use client";
+
 import { Dropdown } from "@/app/components/ui/Dropdown/Dropdown";
 import { mapLayersData } from "./MapLayers.Data";
 

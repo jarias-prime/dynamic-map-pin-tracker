@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-
 import { useMapStore } from "@/app/store/MapStore";
-
 import * as L from "leaflet";
 import type { LatLngTuple } from "leaflet";
 import { useMap, useMapEvents } from "react-leaflet";
@@ -31,12 +29,13 @@ export default function HomePage() {
     setCenterPosition,
   } = useMapStore();
 
+  const markerRefs = useRef<{ [key: number]: L.Marker }>({});
+
   const redIcon = new L.Icon({
     iconUrl:
       "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
     shadowUrl:
       "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -48,7 +47,6 @@ export default function HomePage() {
       "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
     shadowUrl:
       "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -69,9 +67,7 @@ export default function HomePage() {
     useMapEvents({
       async click(e) {
         const { lat, lng } = e.latlng;
-
         const address = await getAddress(lat, lng, setLoading);
-
         onAddMarker(lat, lng, address);
       },
     });
@@ -87,24 +83,18 @@ export default function HomePage() {
     setLoading(true);
     try {
       setCenterPosition([lat, lng]);
-
       const res = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
       );
-
       const data = await res.json();
-
       setLoading(false);
-
       return {
         name: data.name || "Unknown",
         display_name: data.display_name || "Unknown location",
       };
     } catch (error) {
       setLoading(false);
-
       console.error("Error fetching address:", error);
-
       return {
         name: "Error",
         display_name: "Error fetching address",
@@ -123,11 +113,27 @@ export default function HomePage() {
     return null;
   };
 
+  const openPopupForIndex = (index: number) => {
+    Object.values(markerRefs.current).forEach((marker) => marker.closePopup());
+
+    const marker = markerRefs.current[index];
+
+    if (marker) marker.openPopup();
+  };
+
+  const closeAllPopups = () => {
+    Object.values(markerRefs.current).forEach((marker) => marker.closePopup());
+  };
+
   return (
     <>
       <Navigation />
       <MapLayers mapType={mapType} onMapTypeChange={setMapType} />
-      <PinLists />
+      <PinLists
+        positions={positionsList}
+        onHoverItem={openPopupForIndex}
+        onLeaveList={closeAllPopups}
+      />
       {loading && (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/70 backdrop-blur-xs">
           <div className="flex flex-col items-center gap-2">
@@ -144,14 +150,11 @@ export default function HomePage() {
         whenReady={() => setLoading(false)}
       >
         <ZoomControl position="bottomright" />
-
         <ChangeMapView center={centerPosition} />
-
         <TileLayer
           key={mapType}
           url={mapLayersData.find((layer) => layer.key === mapType)!.link}
         />
-
         <MapClickHandler
           onAddMarker={(
             lat,
@@ -161,7 +164,6 @@ export default function HomePage() {
             setPositionsList([...positionsList, { lat, long: lng, address }]);
           }}
         />
-
         {positionsList.map((pos, index) => (
           <Marker
             key={index}
@@ -172,24 +174,19 @@ export default function HomePage() {
                 : blueIcon
             }
             draggable={true}
+            ref={(ref) => {
+              if (ref) {
+                markerRefs.current[index] = ref;
+              }
+            }}
             eventHandlers={{
               dragend: async (e) => {
                 const marker = e.target;
                 const { lat, lng } = marker.getLatLng();
-
                 const address = await getAddress(lat, lng, setLoading);
-
                 const updatedList = positionsList.map((item, i) =>
-                  i === index
-                    ? {
-                        ...item,
-                        lat,
-                        long: lng,
-                        address,
-                      }
-                    : item,
+                  i === index ? { ...item, lat, long: lng, address } : item,
                 );
-
                 setPositionsList(updatedList);
               },
             }}
