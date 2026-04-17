@@ -10,6 +10,7 @@ type MapState = {
     address: { name: string; display_name: string };
   }[];
   centerPosition: [number, number];
+  pinListMobileHeightMax: boolean;
 
   setLoading: (loading: boolean) => void;
   setMapType: (mapType: string) => void;
@@ -21,6 +22,7 @@ type MapState = {
     }[],
   ) => void;
   setCenterPosition: (position: [number, number]) => void;
+  setPinListMobileHeightMax: (isMax: boolean) => void;
 };
 
 export const useMapStore = create<MapState>()(
@@ -30,11 +32,14 @@ export const useMapStore = create<MapState>()(
       mapType: "osm",
       positionsList: [],
       centerPosition: [-37.8394, 144.942],
+      pinListMobileHeightMax: false,
 
       setLoading: (loading) => set({ loading }),
       setMapType: (mapType) => set({ mapType }),
       setPositionsList: (positions) => set({ positionsList: positions }),
       setCenterPosition: (position) => set({ centerPosition: position }),
+      setPinListMobileHeightMax: (isMax) =>
+        set({ pinListMobileHeightMax: isMax }),
     }),
     { name: "map-store", storage: createJSONStorage(() => localStorage) },
   ),

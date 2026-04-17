@@ -1,3 +1,4 @@
+import { use, useState } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 import formatcoords from "formatcoords";
@@ -18,11 +19,17 @@ export const PinLists = ({
   onHoverItem,
   onLeaveList,
 }: PinListsProps) => {
-  const { centerPosition, setCenterPosition } = useMapStore();
+  const {
+    centerPosition,
+    pinListMobileHeightMax,
+    setCenterPosition,
+    setPinListMobileHeightMax,
+  } = useMapStore();
 
   const removePin = (index: number) => {
     const removed = positions[index];
     const newList = positions.filter((_, i) => i !== index);
+
     useMapStore.setState({ positionsList: newList });
 
     if (
@@ -41,12 +48,28 @@ export const PinLists = ({
   return (
     <div
       className={clsx(
-        "absolute z-30 top-19 left-6 h-[calc(100vh-100px)] w-[calc(100%-1rem)] sm:w-[25em] flex flex-col mx-2 bg-background-default",
+        "absolute z-30 bottom-0 left-0 w-full flex flex-col bg-background-default",
         "rounded-lg shadow-md overflow-hidden",
         "transition-all duration-300",
+        "sm:top-19 sm:left-6 sm:h-[calc(100vh-100px)] sm:w-[25em]",
+        pinListMobileHeightMax ? "h-[calc(100%-80px)]" : "h-1/3",
       )}
       onMouseLeave={onLeaveList}
     >
+      <div
+        className={clsx(
+          "block min-h-1 max-h-1 min-w-25 max-w-25 mx-auto bg-background-disabled mt-3 rounded-2xl",
+          "sm:hidden",
+        )}
+        onClick={() => {
+          if (pinListMobileHeightMax) {
+            setPinListMobileHeightMax(false);
+          } else {
+            setPinListMobileHeightMax(true);
+          }
+        }}
+      ></div>
+
       <div
         className={clsx(
           "flex gap-2 justify-between items-center px-5 pt-5 pb-3",
@@ -93,6 +116,9 @@ export const PinLists = ({
                     isActive && "bg-background-primary-subdued",
                   )}
                   key={`${pos.lat}-${pos.long}-${index}`}
+                  onClick={() => {
+                    setPinListMobileHeightMax(false);
+                  }}
                   onMouseEnter={() => {
                     setCenterPosition([pos.lat, pos.long]);
                     onHoverItem(index);
