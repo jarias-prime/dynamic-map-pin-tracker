@@ -52,7 +52,7 @@ export const PinLists = ({
         "rounded-lg shadow-md overflow-hidden",
         "transition-all duration-300",
         "sm:top-19 sm:left-6 sm:h-[calc(100vh-100px)] sm:w-[25em]",
-        pinListMobileHeightMax ? "h-[calc(100%-80px)]" : "h-1/3",
+        pinListMobileHeightMax ? "h-[calc(100%-80px)]" : "h-60",
       )}
       onMouseLeave={onLeaveList}
     >
@@ -83,7 +83,12 @@ export const PinLists = ({
 
       <div className="grid overflow-y-auto">
         {positions.length === 0 ? (
-          <div className="grid gap-4 text-center text-gray-500 w-full pt-16">
+          <div
+            className={clsx(
+              "grid gap-4 text-center text-gray-500 w-full pt-8",
+              "sm:pt-16",
+            )}
+          >
             <Image
               className="m-auto"
               src="/images/magnifying-glass.svg"
