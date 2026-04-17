@@ -49,11 +49,15 @@ npm run preview
 
 ## Tech Stack
 
+- Next.js
 - React
-- Vite
 - TypeScript
 - Leaflet / React Leaflet
 - Tailwind CSS
 - Zustand
+- ESLint
+- PostCSS
+- @iconify/react
+- clsx
 
 Preview Project: [Dynamic Map Pin Tracker](https://dynamic-map-pin-tracker.web.app/)

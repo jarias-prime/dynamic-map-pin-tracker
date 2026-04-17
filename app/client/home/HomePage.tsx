@@ -1,6 +1,10 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 
-import { useMapStore } from "./store/MapStore";
+import { useAuth } from "@/app/contexts/AuthContext";
+
+import { useMapStore } from "@/app/store/MapStore";
 
 import * as L from "leaflet";
 import type { LatLngTuple } from "leaflet";
@@ -13,11 +17,13 @@ import {
   ZoomControl,
 } from "react-leaflet";
 
-import { Navigation } from "./features/Navigation/Navigation";
-import { MapLayers, mapLayersData } from "./features/MapLayers/index";
-import { PinLists } from "./features/PinLists/PinLists";
+import { Navigation } from "@/app/features/Navigation/Navigation";
+import { MapLayers, mapLayersData } from "@/app/features/MapLayers/index";
+import { PinLists } from "@/app/features/PinLists/PinLists";
 
-const App = () => {
+export default function HomePage() {
+  const { user, logout } = useAuth();
+
   const {
     loading,
     mapType,
@@ -198,6 +204,4 @@ const App = () => {
       </MapContainer>
     </>
   );
-};
-
-export default App;
+}
