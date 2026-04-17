@@ -43,7 +43,12 @@ export default function LoginForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-[url(/images/bg-login.jpg)]">
-      <div className="grid gap-12 min-h-123.5 min-w-100 bg-background-default rounded-2xl shadow-lg px-10 py-12">
+      <div
+        className={clsx(
+          "grid gap-12 min-h-123.5 w-[calc(100%-24px)] bg-background-default rounded-2xl shadow-lg px-10 py-12",
+          "sm:min-w-100",
+        )}
+      >
         <Image
           className="m-auto"
           src="/images/map-pinboard-logo.svg"
