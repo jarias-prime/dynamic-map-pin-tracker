@@ -1,17 +1,12 @@
-
-
-https://github.com/user-attachments/assets/d95be05f-b9eb-4e0d-808a-713e0cba3d34
-
-
-
 # Dynamic Map Pin Tracker
 
 An interactive map-based application that allows users to drop, view, and manage location pins in real time, displaying coordinates and reverse-geocoded addresses.
 
-<img width="800" height="413" alt="ezgif-6108abf0cc9ef8c5" src="https://github.com/user-attachments/assets/f87b0ec3-2976-4e85-b0b5-27e6be99db7b" />
+https://github.com/user-attachments/assets/d95be05f-b9eb-4e0d-808a-713e0cba3d34
 
 ## Features
 
+- Basic Login System
 - Add pins by clicking on the map
 - View pin coordinates and reverse-geocoded addresses
 - Switch between multiple map layers (OSM, Dark, Light, Satellite)
@@ -26,6 +21,12 @@ An interactive map-based application that allows users to drop, view, and manage
 
 - Node.js 18+ installed
 - npm or yarn installed
+
+### Default User Credential
+```txt
+Email: admin@example.com
+Password: admin
+```
 
 ### Install dependencies
 
@@ -65,5 +66,6 @@ npm run preview
 - PostCSS
 - @iconify/react
 - clsx
+- vercel
 
-Preview Project: [Dynamic Map Pin Tracker](https://dynamic-map-pin-tracker.web.app/)
+Preview Project: [Dynamic Map Pin Tracker](https://dynamic-map-pin-tracker.vercel.app/)
