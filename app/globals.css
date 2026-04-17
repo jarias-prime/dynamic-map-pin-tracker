@@ -1,10 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wdth,wght@0,75..100,100..900;1,75..100,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wdth,wght@0,75..100,100..900;1,75..100,100..900&display=swap");
 
 @import url("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css");
 
 @import "tailwindcss";
 
 @theme {
+  --font-roboto: Roboto, sans-serif;
+  --font-inter: Inter, sans-serif;
+
   --color-neutral-050: #f8f9fb;
   --color-neutral-100: #e9e9eb;
   --color-neutral-200: #d8d8da;
@@ -142,72 +146,12 @@
   --color-border-on-dark-mode: var(--color-neutral-700);
   --color-border-on-dark-mode-secondary: var(--color-neutral-500);
   --color-border-primary: var(--color-primary-500);
-  --color-border-secondary: var(--color-primary-200);
+  --color-border-primary-secondary: var(--color-primary-200);
   --color-border-success: var(--color-success-500);
   --color-border-warning: var(--color-warning-500);
   --color-border-error: var(--color-error-500);
   /* #endregion - Light Mode (Default) */
 }
-
-/* #region - Dark Mode (Default) */
-@media (prefers-color-scheme: dark) {
-  @theme {
-    /* Background Colors */
-    --color-background-default: var(--color-neutral-900);
-    --color-background-secondary: var(--color-neutral-800);
-    --color-background-disabled: var(--color-neutral-500);
-    --color-background-primary-disabled: color-mix(
-      in srgb,
-      var(--color-primary-200),
-      transparent 90%
-    );
-    --color-background-primary-subdued: color-mix(
-      in srgb,
-      var(--color-primary-500),
-      transparent 90%
-    );
-    --color-background-success-subdued: color-mix(
-      in srgb,
-      var(--color-success-500),
-      transparent 90%
-    );
-    --color-background-warning-subdued: color-mix(
-      in srgb,
-      var(--color-warning-500),
-      transparent 90%
-    );
-    --color-background-error-subdued: color-mix(
-      in srgb,
-      var(--color-error-500),
-      transparent 90%
-    );
-
-    /* Text Colors */
-    --color-txt-default: var(--color-white);
-    --color-txt-secondary: var(--color-neutral-400);
-    --color-txt-tertiary: color-mix(
-      in srgb,
-      var(--color-primary-200),
-      transparent 80%
-    );
-    --color-txt-disabled: var(--color-primary-200);
-
-    /* Icon Colors */
-    --color-icon-default: var(--color-white);
-    /* Neutral */
-    --color-icon-secondary: var(--color-neutral-400);
-    --color-icon-tertiary: color-mix(
-      in srgb,
-      var(--color-primary-200),
-      transparent 20%
-    );
-
-    /* Border Colors */
-    --color-border-default: var(--color-neutral-700);
-    --color-border-secondary: var(--color-neutral-500);
-  }
-}
-/* #endregion - Dark Mode (Default) */
 
 * {
   font-family: "Roboto", sans-serif;

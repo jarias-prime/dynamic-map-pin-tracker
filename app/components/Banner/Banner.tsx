@@ -99,7 +99,7 @@ export const Banner = ({
         onClick={handleClose}
         className={clsx(
           "flex gap-3 items-start cursor-pointer",
-          "duration-150 ease-in-out",
+          "transition duration-150 ease-in-out",
           "hover:scale-105",
           "active:scale-95",
           iconMap[variant]?.color.main,

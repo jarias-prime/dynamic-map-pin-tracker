@@ -46,7 +46,7 @@ export const Dropdown = ({
         type="button"
         className={clsx(
           "w-full flex items-center justify-between px-3 py-2 border border-gray-300 rounded-md bg-white text-left cursor-pointer",
-          "duration-150 ease-in-out",
+          "transition duration-150 ease-in-out",
           "hover:border-gray-400",
           disabled && "bg-gray-100 cursor-not-allowed opacity-50",
         )}
@@ -75,7 +75,7 @@ export const Dropdown = ({
               type="button"
               className={clsx(
                 "w-full text-left px-3 py-2 cursor-pointer",
-                "duration-150 ease-in-out",
+                "transition duration-150 ease-in-out",
                 "hover:bg-background-primary-hover hover:text-white",
                 "focus:bg-gray-100 focus:outline-none",
                 option.value === value &&

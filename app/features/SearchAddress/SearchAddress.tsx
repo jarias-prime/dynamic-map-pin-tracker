@@ -108,7 +108,7 @@ export const SearchAddress = () => {
           className={clsx(
             "w-full pl-8 p-2 rounded-md outline-none",
             "border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary",
-            "duration-150 ease-in-out",
+            "transition duration-150 ease-in-out",
           )}
           placeholder="Search for a location..."
         />

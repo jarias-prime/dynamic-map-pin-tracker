@@ -9,15 +9,15 @@ export const Button = ({
   disabled,
   className,
   icon,
+  type,
   onClick,
   children,
 }: ButtonProps) => {
   return (
     <button
-      onClick={onClick}
       className={clsx(
-        "flex gap-3 items-center font-semibold rounded-md cursor-pointer",
-        "duration-150 ease-in-out",
+        "flex gap-3 items-center justify-center font-semibold rounded-md cursor-pointer",
+        "transition duration-150 ease-in-out",
         "active:scale-95",
         size === "sm" && "px-1 py-1 text-sm",
         size === "md" && "px-3.5 py-2 text-base",
@@ -38,6 +38,8 @@ export const Button = ({
           "disabled:bg-background-primary-disabled disabled:cursor-not-allowed",
         className,
       )}
+      type={type}
+      onClick={onClick}
     >
       {icon && <Icon icon={icon} />}
       {children && <span>{children}</span>}

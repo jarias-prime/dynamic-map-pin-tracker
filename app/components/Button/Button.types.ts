@@ -15,6 +15,7 @@ export type ButtonProps = {
   disabled?: boolean;
   className?: string;
   icon?: string;
+  type?: "button" | "submit" | "reset";
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
 };

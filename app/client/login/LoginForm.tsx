@@ -1,28 +1,33 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
+import clsx from "clsx";
+
 import { useAuth } from "../../contexts/AuthContext";
+import { Button } from "../../components/Button/Button";
 
 export default function LoginForm() {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setErrorEmail("");
+    setErrorPassword("");
     setIsLoading(true);
 
-    // Simulate slight delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 300));
 
-    if (login(email, password)) {
-      setEmail("");
-      setPassword("");
+    if (!login(email, password)) {
+      setErrorEmail("Please enter a valid email address");
+      setErrorPassword("Incorrect passwords, please try again");
     } else {
-      setError("Invalid email or password. Use admin@example.com / admin");
+      setEmail("");
       setPassword("");
     }
 
@@ -30,69 +35,101 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md">
-      <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-lg p-8">
-        <h1 className="text-3xl font-bold text-center text-black dark:text-white mb-8">
-          Dynamic Map Pin Tracker
-        </h1>
+    <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-[url(/images/bg-login.jpg)]">
+      <div className="grid gap-12 min-h-[494px] min-w-[400px] max-w-[400px] bg-background-default rounded-2xl shadow-lg px-10 py-12">
+        <Image
+          className="m-auto"
+          src="/images/map-pinboard-logo.svg"
+          alt="Map Pinboard Logo"
+          height={20}
+          width={116}
+        />
+
+        <div className="grid gap-2 text-center">
+          <h1 className="font-inter font-semibold text-[20px] text-txt-default leading-7">
+            Account Login
+          </h1>
+          <h2 className="text-[12px] leading-4 text-txt-secondary">
+            Please enter your details to sign in.
+          </h2>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              placeholder="admin@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={isLoading}
-              className="w-full px-4 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white placeholder-zinc-500 dark:placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-              required
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={isLoading}
-              className="w-full px-4 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-black dark:text-white placeholder-zinc-500 dark:placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-              required
-            />
-          </div>
-
-          {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+          <div className="grid gap-5">
+            {/* Email */}
+            <div className="grid gap-1">
+              <label className="flex gap-1 font-medium" htmlFor="email">
+                <span className="text-sm text-txt-default">Email</span>
+                <span className="text-xs text-txt-error">*</span>
+              </label>
+              <input
+                id="email"
+                type="email"
+                placeholder="Type here"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
+                className={clsx(
+                  "w-full p-3 border rounded-md transition duration-150 ease-in-out",
+                  "placeholder:text-[14px] placeholder:leading-[140%] placeholder:text-txt-secondary",
+                  "focus:outline-none focus:ring-2 disabled:opacity-50",
+                  errorEmail
+                    ? "border-border-error focus:ring-error-500"
+                    : "border-border-secondary focus:ring-blue-500",
+                )}
+                required
+              />
+              {errorEmail && (
+                <p className="text-sm text-txt-error leading-[140%]">
+                  {errorEmail}
+                </p>
+              )}
             </div>
-          )}
 
-          <button
+            {/* Password */}
+            <div className="grid gap-1">
+              <label
+                className="flex gap-1 font-medium text-txt-default"
+                htmlFor="password"
+              >
+                <span className="text-sm text-txt-default">Password</span>
+                <span className="text-xs text-txt-error">*</span>
+              </label>
+              <input
+                id="password"
+                type="password"
+                placeholder="Type here"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
+                className={clsx(
+                  "w-full p-3 border rounded-md transition duration-150 ease-in-out",
+                  "placeholder:text-[14px] placeholder:leading-[140%] placeholder:text-txt-secondary",
+                  "focus:outline-none focus:ring-2 disabled:opacity-50",
+                  errorPassword
+                    ? "border-border-error focus:ring-error-500"
+                    : "border-border-secondary focus:ring-blue-500",
+                )}
+                required
+              />
+              {errorPassword && (
+                <p className="text-sm text-txt-error leading-[140%]">
+                  {errorPassword}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <Button
+            className="w-full"
+            variant="primary"
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
+            size="md"
           >
             {isLoading ? "Logging in..." : "Login"}
-          </button>
+          </Button>
         </form>
-
-        <p className="text-center text-sm text-zinc-600 dark:text-zinc-400 mt-6">
-          Demo credentials: admin@example.com / admin
-        </p>
       </div>
     </div>
   );

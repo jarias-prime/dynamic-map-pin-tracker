@@ -17,9 +17,5 @@ export default function Page() {
     }
   }, [isLoggedIn, router]);
 
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center min-h-screen bg-zinc-50 dark:bg-black py-12 px-4">
-      <LoginForm />
-    </div>
-  );
+  return <LoginForm />;
 }
