@@ -41,7 +41,7 @@ export default function HomePage() {
       "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
     iconSize: [24, 36],
     iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
+    popupAnchor: [130, 20],
     shadowSize: [41, 41],
   });
 
