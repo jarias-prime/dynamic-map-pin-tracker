@@ -8,9 +8,9 @@ import { useUserStore } from "@/app/store/UserStore";
 import LoginForm from "./client/login/LoginForm";
 
 export default function Page() {
-  const { isAuthenticated } = useUserStore();
-
   const router = useRouter();
+
+  const { isAuthenticated } = useUserStore();
 
   useEffect(() => {
     if (isAuthenticated) {
