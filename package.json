@@ -1,6 +1,6 @@
 {
   "name": "dynamic-map-pin-tracker",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@iconify/react": "^4.1.0",
+    "@vercel/speed-insights": "^2.0.0",
     "clsx": "^2.1.1",
     "formatcoords": "^1.1.3",
     "leaflet": "^1.9.4",

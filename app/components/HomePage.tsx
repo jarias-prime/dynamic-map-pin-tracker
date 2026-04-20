@@ -45,86 +45,14 @@ export default function HomePage() {
     shadowSize: [41, 41],
   });
 
-  const MapClickHandler = ({
-    onAddMarker,
-  }: {
-    onAddMarker: (
-      lat: number,
-      lng: number,
-      address: { name: string; display_name: string },
-    ) => void;
-  }) => {
-    const { setLoading } = useMapStore();
-
-    useMapEvents({
-      async click(e) {
-        const { lat, lng } = e.latlng;
-        const address = await getAddress(lat, lng, setLoading);
-        onAddMarker(lat, lng, address);
-      },
-    });
-
-    return null;
-  };
-
-  const getAddress = async (
-    lat: number,
-    lng: number,
-    setLoading: (loading: boolean) => void,
-  ): Promise<{ name: string; display_name: string }> => {
-    setLoading(true);
-    try {
-      setCenterPosition([lat, lng]);
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
-      );
-      const data = await res.json();
-      setLoading(false);
-      return {
-        name: data.name || "Unknown",
-        display_name: data.display_name || "Unknown location",
-      };
-    } catch (error) {
-      setLoading(false);
-      console.error("Error fetching address:", error);
-      return {
-        name: "Error",
-        display_name: "Error fetching address",
-      };
-    }
-  };
-
-  const ChangeMapView = ({ center }: { center: LatLngTuple }) => {
-    const map = useMap();
-    const mapRef = useRef(map);
-
-    useEffect(() => {
-      mapRef.current?.flyTo(center, 13);
-    }, [center]);
-
-    return null;
-  };
-
-  const openPopupForIndex = (index: number) => {
-    Object.values(markerRefs.current).forEach((marker) => marker.closePopup());
-
-    const marker = markerRefs.current[index];
-
-    if (marker) marker.openPopup();
-  };
-
-  const closeAllPopups = () => {
-    Object.values(markerRefs.current).forEach((marker) => marker.closePopup());
-  };
-
   return (
     <>
       <Navigation />
       <MapLayers mapType={mapType} onMapTypeChange={setMapType} />
       <PinLists
         positions={positionsList}
-        onHoverItem={openPopupForIndex}
-        onLeaveList={closeAllPopups}
+        onHoverItem={(index) => openPopupForIndex(index, markerRefs)}
+        onLeaveList={() => closeAllPopups(markerRefs)}
       />
       {loading && (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/70 backdrop-blur-xs">
@@ -148,13 +76,10 @@ export default function HomePage() {
           url={mapLayersData.find((layer) => layer.key === mapType)!.link}
         />
         <MapClickHandler
-          onAddMarker={(
-            lat,
-            lng,
-            address: { name: string; display_name: string },
-          ) => {
+          onAddMarker={(lat, lng, address) => {
             setPositionsList([...positionsList, { lat, long: lng, address }]);
           }}
+          setCenterPosition={setCenterPosition}
         />
         {positionsList.map((pos, index) => (
           <Marker
@@ -171,7 +96,12 @@ export default function HomePage() {
               dragend: async (e) => {
                 const marker = e.target;
                 const { lat, lng } = marker.getLatLng();
-                const address = await getAddress(lat, lng, setLoading);
+                const address = await getAddress(
+                  lat,
+                  lng,
+                  setLoading,
+                  setCenterPosition,
+                );
                 const updatedList = positionsList.map((item, i) =>
                   i === index ? { ...item, lat, long: lng, address } : item,
                 );
@@ -208,3 +138,84 @@ export default function HomePage() {
     </>
   );
 }
+
+const MapClickHandler = ({
+  onAddMarker,
+  setCenterPosition,
+}: {
+  onAddMarker: (
+    lat: number,
+    lng: number,
+    address: { name: string; display_name: string },
+  ) => void;
+  setCenterPosition: (position: [number, number]) => void;
+}) => {
+  const { setLoading } = useMapStore();
+
+  useMapEvents({
+    async click(e) {
+      const { lat, lng } = e.latlng;
+      const address = await getAddress(lat, lng, setLoading, setCenterPosition);
+
+      onAddMarker(lat, lng, address);
+    },
+  });
+
+  return null;
+};
+
+const getAddress = async (
+  lat: number,
+  lng: number,
+  setLoading: (loading: boolean) => void,
+  setCenterPosition: (position: [number, number]) => void,
+): Promise<{ name: string; display_name: string }> => {
+  setLoading(true);
+  try {
+    setCenterPosition([lat, lng]);
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+    );
+    const data = await res.json();
+    setLoading(false);
+    return {
+      name: data.name || "Unknown",
+      display_name: data.display_name || "Unknown location",
+    };
+  } catch (error) {
+    setLoading(false);
+    console.error("Error fetching address:", error);
+    return {
+      name: "Error",
+      display_name: "Error fetching address",
+    };
+  }
+};
+
+const ChangeMapView = ({ center }: { center: LatLngTuple }) => {
+  const map = useMap();
+  const mapRef = useRef(map);
+
+  useEffect(() => {
+    mapRef.current?.flyTo(center, 13);
+  }, [center]);
+
+  return null;
+};
+
+const openPopupForIndex = (
+  index: number,
+  markerRefs: React.MutableRefObject<{ [key: number]: L.Marker }>,
+) => {
+  Object.values(markerRefs.current).forEach((marker) => marker.closePopup());
+
+  const marker = markerRefs.current[index];
+
+  if (marker) marker.openPopup();
+};
+
+const closeAllPopups = (
+  markerRefs: React.MutableRefObject<{ [key: number]: L.Marker }>,
+) => {
+  Object.values(markerRefs.current).forEach((marker) => marker.closePopup());
+};
