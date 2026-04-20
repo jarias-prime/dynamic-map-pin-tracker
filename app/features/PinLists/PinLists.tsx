@@ -50,10 +50,11 @@ export const PinLists = ({
   return (
     <div
       className={clsx(
-        "absolute z-30 bottom-0 left-0 w-full flex flex-col bg-background-default",
-        "rounded-lg shadow-md overflow-hidden",
+        "fixed z-30 bottom-0 left-0 w-full flex flex-col bg-background-default",
+        "rounded-tl-xl rounded-tr-xl rounded-b-none shadow-md overflow-hidden",
         "transition-all duration-300",
-        "sm:top-19 sm:left-6 sm:h-[calc(100vh-100px)] sm:w-[25em]",
+        "sm:absolute sm:top-19 sm:left-6 sm:h-[calc(100vh-100px)] sm:w-[25em] sm:rounded-xl",
+        "[@media(max-height:600px)]:h-[calc(100vh-75px)] [@media(max-height:600px)]:rounded-tl-xl [@media(max-height:600px)]:rounded-tr-xl [@media(max-height:600px)]:rounded-b-none",
         pinListMobileHeightMax ? "h-[calc(100%-80px)]" : "h-60",
       )}
       onMouseLeave={onLeaveList}
@@ -64,11 +65,51 @@ export const PinLists = ({
           "sm:hidden",
         )}
         onClick={() => {
-          if (pinListMobileHeightMax) {
-            setPinListMobileHeightMax(false);
-          } else {
-            setPinListMobileHeightMax(true);
-          }
+          setPinListMobileHeightMax(!pinListMobileHeightMax);
+        }}
+        onTouchStart={(e) => {
+          const startY = e.touches[0].clientY;
+
+          const handleMove = (moveEvent: TouchEvent) => {
+            const currentY = moveEvent.touches[0].clientY;
+            const diff = currentY - startY;
+
+            if (diff < -30) {
+              setPinListMobileHeightMax(true);
+            } else if (diff > 30) {
+              setPinListMobileHeightMax(false);
+            }
+          };
+
+          const handleEnd = () => {
+            document.removeEventListener("touchmove", handleMove);
+            document.removeEventListener("touchend", handleEnd);
+          };
+
+          document.addEventListener("touchmove", handleMove);
+          document.addEventListener("touchend", handleEnd);
+        }}
+        onMouseDown={(e) => {
+          const startY = e.clientY;
+
+          const handleMove = (moveEvent: MouseEvent) => {
+            const currentY = moveEvent.clientY;
+            const diff = currentY - startY;
+
+            if (diff < -30) {
+              setPinListMobileHeightMax(true);
+            } else if (diff > 30) {
+              setPinListMobileHeightMax(false);
+            }
+          };
+
+          const handleEnd = () => {
+            document.removeEventListener("mousemove", handleMove);
+            document.removeEventListener("mouseup", handleEnd);
+          };
+
+          document.addEventListener("mousemove", handleMove);
+          document.addEventListener("mouseup", handleEnd);
         }}
       ></div>
 
