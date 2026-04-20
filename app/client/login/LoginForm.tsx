@@ -136,13 +136,17 @@ export default function LoginForm() {
           </div>
 
           <Button
-            className="w-full"
+            className="min-h-9.5 w-full"
             variant="primary"
             type="submit"
             disabled={isLoading}
             size="md"
           >
-            {isLoading ? "Logging in..." : "Login"}
+            {isLoading ? (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              "Login"
+            )}
           </Button>
         </form>
       </div>
