@@ -1,8 +1,8 @@
 "use client";
 
-import { Dropdown } from "@/app/components/ui/Dropdown/Dropdown";
+import { useMapStore } from "@/app/store/MapStore";
 
-import { mapLayersData } from "./MapLayers.Data";
+import { Dropdown } from "@/app/components/ui/Dropdown/Dropdown";
 
 interface MapLayersProps {
   mapType: string;
@@ -10,10 +10,12 @@ interface MapLayersProps {
 }
 
 export const MapLayers = ({ mapType, onMapTypeChange }: MapLayersProps) => {
+  const { mapTypeOptions } = useMapStore();
+
   return (
     <div className="fixed z-30 top-20 right-4">
       <Dropdown
-        options={mapLayersData.map((layer) => ({
+        options={mapTypeOptions.map((layer) => ({
           value: layer.key,
           label: layer.label,
         }))}

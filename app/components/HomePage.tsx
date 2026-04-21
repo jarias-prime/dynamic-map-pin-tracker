@@ -18,13 +18,14 @@ import {
 import formatcoords from "formatcoords";
 
 import { Navigation } from "@/app/features/Navigation/Navigation";
-import { MapLayers, mapLayersData } from "@/app/features/MapLayers/index";
+import { MapLayers } from "@/app/features/MapLayers/MapLayers";
 import { PinLists } from "@/app/features/PinLists/PinLists";
 
 export default function HomePage() {
   const {
     loading,
     mapType,
+    mapTypeOptions,
     positionsList,
     centerPosition,
     setLoading,
@@ -73,7 +74,7 @@ export default function HomePage() {
         <ChangeMapView center={centerPosition} />
         <TileLayer
           key={mapType}
-          url={mapLayersData.find((layer) => layer.key === mapType)!.link}
+          url={mapTypeOptions.find((layer) => layer.key === mapType)!.link}
         />
         <MapClickHandler
           onAddMarker={(lat, lng, address) => {
